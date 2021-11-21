@@ -1,19 +1,23 @@
 package ru.rastorguev.springlesson1.ioc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import ru.rastorguev.springlesson1.ioc.annotations.CacheResult;
-import ru.rastorguev.springlesson1.ioc.interfaces.ExternalService;
 
-import java.util.Arrays;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 @Component
 public class CacheResultBeanPostProcessor implements BeanPostProcessor {
+
+    private final Map<String, Map<Object[], Object>> cache = new HashMap<>();
+
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         return bean;
@@ -22,31 +26,55 @@ public class CacheResultBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 
-        //не понятно, должна ли аннотация срабатывать на любые методы? а значит без проверки на
-        // ExternalService - но тогда падает контекст ругаясь на невозможность создания какого то родного бина
+        boolean cacheResultPresented = false;
 
-        if (bean instanceof ExternalService) {
-            ProxyFactory proxyFactory = new ProxyFactory(bean);
-            proxyFactory.addAdvice(new MethodInterceptor() {
-                @Override
-                public Object invoke(MethodInvocation invocation) throws Throwable {
-                    Object key = Arrays.toString(invocation.getArguments()) + invocation.getMethod().getName();
-                    Object proceededObj = invocation.proceed();
-                    if (invocation.getMethod().isAnnotationPresent(CacheResult.class)) {
-                        return cache(key, proceededObj);
-                    }
-                    return proceededObj;
-                }
-            });
-            return proxyFactory.getProxy();
+        for (Method method : bean.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(CacheResult.class)) {
+                log.info("Found method with annotation @CacheResult Method name : {}", method.getName());
+                cacheResultPresented = true;
+            }
         }
-        return bean;
+
+        if (!cacheResultPresented) return bean;
+
+        ProxyFactory proxyFactory = new ProxyFactory(bean);
+        proxyFactory.addAdvice((MethodInterceptor) invocation -> {
+
+            String methodName = invocation.getMethod().getName();
+            Object[] methodArguments = invocation.getArguments();
+
+            //проверка вложенной мапы
+            Map<Object[], Object> nestedMap = cache.get(methodName);
+            if (nestedMap == null) {
+
+                Object proceed = invocation.proceed();
+
+                cache.put(methodName, new HashMap<>() {{
+                    put(methodArguments, proceed);
+                }});
+
+                log.info("No cached values found. New value cached.");
+                log.info("methodName {}, methodArguments {}, proceed {}", methodName, methodArguments, proceed);
+                return proceed;
+            }
+
+            //проверка значений вложенной мапы
+            Object methodCachedResult = nestedMap.get(methodArguments);
+
+            if (methodCachedResult == null) {
+
+                Object proceed = invocation.proceed();
+
+                nestedMap.put(methodArguments, proceed);
+
+                log.info("The method name was found, but the set of arguments is different. Added a new value.");
+                return proceed;
+            }
+            return methodCachedResult;
+
+        });
+        return proxyFactory.getProxy();
+
     }
 
-    //тк данная аннотация должная работать и для других методов - ключ = поданые значения + название метода.
-    //как я понял можно сделать собственную реализацию на мапах, но зачем когда есть реализация спринга?
-    @Cacheable(cacheNames = "cacheResult", key = "#key")
-    public Object cache(Object key, Object proceededObj) {
-        return proceededObj;
-    }
 }

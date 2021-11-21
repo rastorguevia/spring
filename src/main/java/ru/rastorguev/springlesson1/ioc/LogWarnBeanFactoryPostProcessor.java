@@ -6,6 +6,9 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
+import ru.rastorguev.springlesson1.ioc.annotations.CacheResult;
+
+import java.lang.reflect.Method;
 
 @Slf4j
 @Component
@@ -20,12 +23,24 @@ public class LogWarnBeanFactoryPostProcessor implements BeanFactoryPostProcessor
                 log.warn("beanDefinitionName: {}, scope: {}", beanDefinitionName, beanDefinition.getScope());
             }
 
+            String beanClassName = beanDefinition.getBeanClassName();
 
-            //TODO доделать, не смог найти как достать аннотации методов или класса?
+            if (beanClassName == null) continue;
 
-            // Так же создать BeanFactoryPostProcessor, который будет писать в лог WARN если есть бин,
-            // который имеет Scope=Prototype и аннотацию @CacheResult. Проверить работоспособность данного BeanFactoryPostProcessor.
+            Class<?> beanClass = null;
+            try {
+                beanClass = Class.forName(beanClassName);
+            } catch (ClassNotFoundException e) {
+                log.error("postProcessBeanFactory error :  ", e);
+            }
 
+            if (beanClass == null) continue;
+
+            for (Method method : beanClass.getDeclaredMethods()) {
+                if (method.isAnnotationPresent(CacheResult.class)) {
+                    log.warn("Annotation @CacheResult found. Class: {}, Method: {}", beanDefinition.getBeanClassName(), method.getName());
+                }
+            }
         }
 
     }
