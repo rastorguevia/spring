@@ -12,13 +12,19 @@ import org.springframework.stereotype.Component;
 public class LogWarnBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory BeanFactory) throws BeansException {
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 
-        for (String beanDefinitionName : BeanFactory.getBeanDefinitionNames()) {
-            BeanDefinition beanDefinition = BeanFactory.getBeanDefinition(beanDefinitionName);
-            if (beanDefinition.getScope() == BeanDefinition.SCOPE_PROTOTYPE) {
+        for (String beanDefinitionName : beanFactory.getBeanDefinitionNames()) {
+            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanDefinitionName);
+            if (beanDefinition.isPrototype()) {
                 log.warn("beanDefinitionName: {}, scope: {}", beanDefinitionName, beanDefinition.getScope());
             }
+
+
+            //TODO доделать, не смог найти как достать аннотации методов или класса?
+
+            // Так же создать BeanFactoryPostProcessor, который будет писать в лог WARN если есть бин,
+            // который имеет Scope=Prototype и аннотацию @CacheResult. Проверить работоспособность данного BeanFactoryPostProcessor.
 
         }
 

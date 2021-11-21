@@ -16,8 +16,6 @@ import java.util.Map;
 @Component
 public class ExternalServiceImpl implements ExternalService {
 
-    //private static final Logger LOGGER = LoggerFactory.getLogger(ExternalServiceImpl.class);
-
     private Map<Integer, ExternalInfo> externalInfoMap;
 
     public ExternalServiceImpl() {

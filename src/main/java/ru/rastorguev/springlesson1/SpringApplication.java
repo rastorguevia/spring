@@ -3,9 +3,11 @@ package ru.rastorguev.springlesson1;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.PropertySource;
 import ru.rastorguev.springlesson1.ioc.Flow;
 
 @SpringBootApplication
+@PropertySource("classpath:application.properties")
 public class SpringApplication {
 
     public static void main(String[] args) {
