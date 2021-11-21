@@ -21,6 +21,10 @@ public class CacheResultBeanPostProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+
+        //не понятно, должна ли аннотация срабатывать на любые методы? а значит без проверки на
+        // ExternalService - но тогда падает контекст ругаясь на невозможность создания какого то родного бина
+
         if (bean instanceof ExternalService) {
             ProxyFactory proxyFactory = new ProxyFactory(bean);
             proxyFactory.addAdvice(new MethodInterceptor() {
