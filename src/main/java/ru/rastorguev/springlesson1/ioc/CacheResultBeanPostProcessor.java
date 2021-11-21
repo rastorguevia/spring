@@ -73,10 +73,12 @@ public class CacheResultBeanPostProcessor implements BeanPostProcessor {
                     log.info("The method name was found, but the set of arguments is different. Added a new value.");
                     return proceed;
                 }
-                return methodCachedResult;
-            //}
 
-            //return invocation.proceed();
+                log.info("Returned cached value.");
+                return methodCachedResult;
+            //} else return invocation.proceed();
+
+
 
         });
         return proxyFactory.getProxy();
