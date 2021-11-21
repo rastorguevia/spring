@@ -76,6 +76,7 @@ public class CacheResultBeanPostProcessor implements BeanPostProcessor {
 
                 log.info("Returned cached value.");
                 return methodCachedResult;
+
             //} else return invocation.proceed();
 
 
