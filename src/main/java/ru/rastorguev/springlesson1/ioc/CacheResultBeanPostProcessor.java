@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import ru.rastorguev.springlesson1.ioc.annotations.CacheResult;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 @Component
 public class CacheResultBeanPostProcessor implements BeanPostProcessor {
 
-    private final Map<String, Map<Object[], Object>> cache = new HashMap<>();
+    private final Map<String, Map<String, Object>> cache = new HashMap<>();
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -40,37 +41,42 @@ public class CacheResultBeanPostProcessor implements BeanPostProcessor {
         ProxyFactory proxyFactory = new ProxyFactory(bean);
         proxyFactory.addAdvice((MethodInterceptor) invocation -> {
 
-            String methodName = invocation.getMethod().getName();
-            Object[] methodArguments = invocation.getArguments();
+            //if (invocation.getMethod().isAnnotationPresent(CacheResult.class)) {
 
-            //проверка вложенной мапы
-            Map<Object[], Object> nestedMap = cache.get(methodName);
-            if (nestedMap == null) {
+                String methodName = invocation.getMethod().getName();
+                String methodArguments = Arrays.toString(invocation.getArguments());
 
-                Object proceed = invocation.proceed();
+                //проверка вложенной мапы
+                Map<String, Object> nestedMap = cache.get(methodName);
+                if (nestedMap == null) {
 
-                cache.put(methodName, new HashMap<>() {{
-                    put(methodArguments, proceed);
-                }});
+                    Object proceed = invocation.proceed();
 
-                log.info("No cached values found. New value cached.");
-                log.info("methodName {}, methodArguments {}, proceed {}", methodName, methodArguments, proceed);
-                return proceed;
-            }
+                    cache.put(methodName, new HashMap<>() {{
+                        put(methodArguments, proceed);
+                    }});
 
-            //проверка значений вложенной мапы
-            Object methodCachedResult = nestedMap.get(methodArguments);
+                    log.info("No cached values found. New value cached.");
+                    log.info("methodName {}, methodArguments {}, proceed {}", methodName, methodArguments, proceed);
+                    return proceed;
+                }
 
-            if (methodCachedResult == null) {
+                //проверка значений вложенной мапы
+                Object methodCachedResult = nestedMap.get(methodArguments);
 
-                Object proceed = invocation.proceed();
+                if (methodCachedResult == null) {
 
-                nestedMap.put(methodArguments, proceed);
+                    Object proceed = invocation.proceed();
 
-                log.info("The method name was found, but the set of arguments is different. Added a new value.");
-                return proceed;
-            }
-            return methodCachedResult;
+                    nestedMap.put(methodArguments, proceed);
+
+                    log.info("The method name was found, but the set of arguments is different. Added a new value.");
+                    return proceed;
+                }
+                return methodCachedResult;
+            //}
+
+            //return invocation.proceed();
 
         });
         return proxyFactory.getProxy();
