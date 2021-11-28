@@ -3,10 +3,12 @@ package ru.rastorguev.springlesson1;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import ru.rastorguev.springlesson1.aop.service.Flow;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 @PropertySource("classpath:application.properties")
 public class SpringApplication {
 
