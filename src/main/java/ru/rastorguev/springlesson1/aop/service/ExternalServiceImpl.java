@@ -2,7 +2,7 @@ package ru.rastorguev.springlesson1.aop.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.aop.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.aop.aspect.anotations.CacheResult;
 import ru.rastorguev.springlesson1.aop.model.ExternalInfo;
 import ru.rastorguev.springlesson1.aop.service.interfaces.ExternalService;
 
@@ -36,8 +36,12 @@ public class ExternalServiceImpl implements ExternalService {
     public ExternalInfo getExternalInfo(Integer id) {
         try {
             ExternalInfo ei = externalInfoMap.get(id);
-            log.info("Call getExternalInfo id: {}, ExternalInfo: {}", id, ei);
-            return ei;
+            if (ei == null) {
+                throw new RuntimeException("Не найдено!");
+            } else {
+                log.info("Call getExternalInfo id: {}, ExternalInfo: {}", id, ei);
+                return ei;
+            }
         } catch (Exception e) {
             log.error("getExternalInfo Exception: ", e);
         }

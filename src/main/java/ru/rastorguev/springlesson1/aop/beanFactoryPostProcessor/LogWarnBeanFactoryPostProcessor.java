@@ -6,9 +6,10 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.aop.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.aop.aspect.anotations.CacheResult;
 
 import java.lang.reflect.Method;
+
 
 @Slf4j
 @Component
