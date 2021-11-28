@@ -1,10 +1,10 @@
-package ru.rastorguev.springlesson1.ioc.beanPostProcessors.methodInterceptor;
+package ru.rastorguev.springlesson1.aop.beanPostProcessors.methodInterceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.core.annotation.AnnotationUtils;
-import ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.aop.beanPostProcessors.annotations.CacheResult;
 
 import java.lang.reflect.Method;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package ru.rastorguev.springlesson1.ioc.beanFactoryPostProcessor;
+package ru.rastorguev.springlesson1.aop.beanFactoryPostProcessor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.aop.beanPostProcessors.annotations.CacheResult;
 
 import java.lang.reflect.Method;
 

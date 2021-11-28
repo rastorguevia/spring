@@ -1,11 +1,11 @@
-package ru.rastorguev.springlesson1.ioc.beanPostProcessors;
+package ru.rastorguev.springlesson1.aop.beanPostProcessors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations.CacheResult;
-import ru.rastorguev.springlesson1.ioc.beanPostProcessors.methodInterceptor.CacheResultMethodInterceptor;
+import ru.rastorguev.springlesson1.aop.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.aop.beanPostProcessors.methodInterceptor.CacheResultMethodInterceptor;
 
 import java.lang.reflect.Method;
 

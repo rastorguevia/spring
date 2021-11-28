@@ -1,10 +1,10 @@
-package ru.rastorguev.springlesson1.ioc.service;
+package ru.rastorguev.springlesson1.aop.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations.CacheResult;
-import ru.rastorguev.springlesson1.ioc.model.ExternalInfo;
-import ru.rastorguev.springlesson1.ioc.service.interfaces.ExternalService;
+import ru.rastorguev.springlesson1.aop.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.aop.model.ExternalInfo;
+import ru.rastorguev.springlesson1.aop.service.interfaces.ExternalService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
