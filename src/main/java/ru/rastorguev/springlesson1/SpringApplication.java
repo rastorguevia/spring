@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.PropertySource;
-import ru.rastorguev.springlesson1.ioc.Flow;
+import ru.rastorguev.springlesson1.ioc.service.Flow;
 
 @SpringBootApplication
 @PropertySource("classpath:application.properties")

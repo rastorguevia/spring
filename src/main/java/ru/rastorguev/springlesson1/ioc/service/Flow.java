@@ -1,13 +1,13 @@
-package ru.rastorguev.springlesson1.ioc;
+package ru.rastorguev.springlesson1.ioc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.ioc.interfaces.ExternalInfoProcess;
-import ru.rastorguev.springlesson1.ioc.interfaces.ExternalService;
-import ru.rastorguev.springlesson1.ioc.pojo.ExternalInfo;
+import ru.rastorguev.springlesson1.ioc.model.ExternalInfo;
+import ru.rastorguev.springlesson1.ioc.service.interfaces.ExternalInfoProcess;
+import ru.rastorguev.springlesson1.ioc.service.interfaces.ExternalService;
 
 @Slf4j
 @Component

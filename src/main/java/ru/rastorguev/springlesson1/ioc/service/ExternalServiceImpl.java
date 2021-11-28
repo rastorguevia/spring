@@ -1,10 +1,10 @@
-package ru.rastorguev.springlesson1.ioc;
+package ru.rastorguev.springlesson1.ioc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.ioc.annotations.CacheResult;
-import ru.rastorguev.springlesson1.ioc.interfaces.ExternalService;
-import ru.rastorguev.springlesson1.ioc.pojo.ExternalInfo;
+import ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations.CacheResult;
+import ru.rastorguev.springlesson1.ioc.model.ExternalInfo;
+import ru.rastorguev.springlesson1.ioc.service.interfaces.ExternalService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -39,7 +39,7 @@ public class ExternalServiceImpl implements ExternalService {
             log.info("Call getExternalInfo id: {}, ExternalInfo: {}", id, ei);
             return ei;
         } catch (Exception e) {
-            log.error("getExternalInfo Exception: {}", e);
+            log.error("getExternalInfo Exception: ", e);
         }
         return null;
     }

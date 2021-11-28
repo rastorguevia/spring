@@ -1,4 +1,4 @@
-package ru.rastorguev.springlesson1.ioc.pojo;
+package ru.rastorguev.springlesson1.ioc.model;
 
 public class ExternalInfo {
 

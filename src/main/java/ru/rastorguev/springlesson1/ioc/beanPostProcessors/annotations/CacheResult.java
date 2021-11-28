@@ -1,4 +1,4 @@
-package ru.rastorguev.springlesson1.ioc.annotations;
+package ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

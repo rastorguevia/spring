@@ -4,8 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.ioc.annotations.CacheResult;
+import ru.rastorguev.springlesson1.ioc.beanPostProcessors.annotations.CacheResult;
 import ru.rastorguev.springlesson1.ioc.beanPostProcessors.methodInterceptor.CacheResultMethodInterceptor;
 
 import java.lang.reflect.Method;

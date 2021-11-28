@@ -1,11 +1,11 @@
-package ru.rastorguev.springlesson1.ioc;
+package ru.rastorguev.springlesson1.ioc.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.rastorguev.springlesson1.ioc.interfaces.ExternalInfoProcess;
-import ru.rastorguev.springlesson1.ioc.pojo.ExternalInfo;
+import ru.rastorguev.springlesson1.ioc.model.ExternalInfo;
+import ru.rastorguev.springlesson1.ioc.service.interfaces.ExternalInfoProcess;
 
 @Slf4j
 @Component
@@ -17,7 +17,7 @@ public class ExternalInfoProcessImpl implements ExternalInfoProcess {
 
     @Override
     public boolean run(ExternalInfo externalInfo) {
-        if (externalInfo.getId() == idNotProcess) {
+        if (externalInfo.getId().equals(idNotProcess)) {
             log.info("id = {} = idNotProcess return false", externalInfo.getId());
             return false;
         } else {
