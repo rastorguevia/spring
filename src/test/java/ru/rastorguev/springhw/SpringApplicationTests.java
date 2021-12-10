@@ -1,4 +1,4 @@
-package ru.rastorguev.springlesson1;
+package ru.rastorguev.springhw;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
