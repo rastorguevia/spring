@@ -70,6 +70,38 @@ public class BankBookServiceImpl implements BankBookService {
         return bankBookDto;
     }
 
+    @Override
+    public BankBookDto updateBankBook(BankBookDto bbd) {
+        BankBookDto bankBookDtoFromMap = bankBookMap.get(bbd.getId());
+        if (bankBookDtoFromMap == null)
+            throw new BankBookException("Такого счета не существует. В обновлении отказано. ", bbd.getId());
 
+        if (!bankBookDtoFromMap.getNumber().equalsIgnoreCase(bbd.getNumber()))
+            throw new BankBookException("Номер счета менять нельзя. В обновлении отказано. ", bbd.getId());
 
+        bankBookMap.put(bbd.getId(), bbd);
+        return bbd;
+    }
+
+    @Override
+    public void deleteBankBook(Integer bankBookId) {
+        BankBookDto bankBookDtoFromMap = bankBookMap.get(bankBookId);
+        if (bankBookDtoFromMap == null)
+            throw new BankBookException("Такого счета не существует. В удалении отказано. ", bankBookId);
+
+        bankBookMap.remove(bankBookId);
+    }
+
+    @Override
+    public void deleteAllBankBookByUserId(Integer userId) {
+        List<BankBookDto> userBankBooks = bankBookMap.values()
+                .stream()
+                .filter(bankBookDto -> bankBookDto.getUserId().equals(userId))
+                .collect(Collectors.toList());
+
+        if (userBankBooks.isEmpty())
+            throw new UserNotFoundException("Счета по id пользователя не найдены! В удалении отказано. ", userId);
+
+        userBankBooks.forEach(bbd -> bankBookMap.remove(bbd.getId()));
+    }
 }

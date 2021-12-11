@@ -33,4 +33,19 @@ public class BankBookRestController {
         return ResponseEntity.ok(bankBookService.createBankBook(bbd));
     }
 
+    @PutMapping
+    public ResponseEntity<BankBookDto> updateBankBook(@RequestBody BankBookDto bbd) {
+        return ResponseEntity.ok(bankBookService.updateBankBook(bbd));
+    }
+
+    @DeleteMapping("/{bankBookId}")
+    public void deleteBankBook(@PathVariable Integer bankBookId) {
+        bankBookService.deleteBankBook(bankBookId);
+    }
+
+    @DeleteMapping("/by-user-id/{userId}")
+    public void deleteAllBankBookByUserId(@PathVariable Integer userId) {
+        bankBookService.deleteAllBankBookByUserId(userId);
+    }
+
 }
