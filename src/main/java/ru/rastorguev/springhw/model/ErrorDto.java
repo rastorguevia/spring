@@ -8,7 +8,7 @@ import lombok.Data;
 public class ErrorDto {
 
     private String status;
-    private Integer userIdNotFound;
+    private Integer errorId;
     private String message;
 
 }

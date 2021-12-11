@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BankBookService {
 
-    List<BankBookDto> getAllBankBookById(Integer userId);
+    List<BankBookDto> getAllBankBookByUserId(Integer userId);
     BankBookDto getBankBookById(Integer bankBookId);
     BankBookDto createBankBook (BankBookDto bankBookDto);
 

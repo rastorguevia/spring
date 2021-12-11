@@ -3,7 +3,6 @@ package ru.rastorguev.springhw.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.rastorguev.springhw.exception.UserNotFoundException;
 import ru.rastorguev.springhw.model.BankBookDto;
 import ru.rastorguev.springhw.service.BankBookService;
 
@@ -21,7 +20,7 @@ public class BankBookRestController {
 
     @GetMapping("/by-user-id/{userId}")
     public ResponseEntity<List<BankBookDto>> getAllBankBooksByUserId(@PathVariable Integer userId) {
-        return ResponseEntity.ok(bankBookService.getAllBankBookById(userId));
+        return ResponseEntity.ok(bankBookService.getAllBankBookByUserId(userId));
     }
 
     @GetMapping("/{bankBookId}")
