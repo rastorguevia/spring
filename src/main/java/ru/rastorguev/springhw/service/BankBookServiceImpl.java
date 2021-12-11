@@ -1,6 +1,7 @@
 package ru.rastorguev.springhw.service;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import ru.rastorguev.springhw.exception.BankBookException;
 import ru.rastorguev.springhw.exception.BankBookNotFoundException;
 import ru.rastorguev.springhw.exception.UserNotFoundException;
@@ -8,14 +9,11 @@ import ru.rastorguev.springhw.model.BankBookDto;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class BankBookServiceImpl implements BankBookService {
@@ -25,8 +23,25 @@ public class BankBookServiceImpl implements BankBookService {
 
     @PostConstruct
     private void init() {
-        bankBookMap.put(1, new BankBookDto(sequenceId.getAndIncrement(), 1, "12345", new BigDecimal(250000), "RUB"));
-        bankBookMap.put(2, new BankBookDto(sequenceId.getAndIncrement(), 1, "123456", new BigDecimal(30000), "EUR"));
+        //bankBookMap.put(1, new BankBookDto(sequenceId.getAndIncrement(), 1, "12345", new BigDecimal(250000), "RUB"));
+        //bankBookMap.put(2, new BankBookDto(sequenceId.getAndIncrement(), 1, "123456", new BigDecimal(30000), "EUR"));
+        bankBookMap.put(1, BankBookDto.builder()
+                .id(sequenceId.getAndIncrement())
+                .userId(1)
+                .number("12345")
+                .amount(new BigDecimal(250000))
+                .currency("RUB")
+                .build()
+        );
+
+        bankBookMap.put(2, BankBookDto.builder()
+                .id(sequenceId.getAndIncrement())
+                .userId(1)
+                .number("123456")
+                .amount(new BigDecimal(30000))
+                .currency("EUR")
+                .build()
+        );
     }
 
     @Override
@@ -37,7 +52,7 @@ public class BankBookServiceImpl implements BankBookService {
                 .filter(bankBookDto -> bankBookDto.getUserId().equals(userId))
                 .collect(Collectors.toList());
 
-        if (list.isEmpty()) throw new UserNotFoundException("Счета по id пользователя не найдены! ", userId);
+        if (CollectionUtils.isEmpty(list)) throw new UserNotFoundException("Счета по id пользователя не найдены! ", userId);
         else return list;
     }
 
@@ -87,7 +102,7 @@ public class BankBookServiceImpl implements BankBookService {
     public void deleteBankBook(Integer bankBookId) {
         BankBookDto bankBookDtoFromMap = bankBookMap.get(bankBookId);
         if (bankBookDtoFromMap == null)
-            throw new BankBookException("Такого счета не существует. В удалении отказано. ", bankBookId);
+            throw new BankBookNotFoundException("Такого счета не существует. В удалении отказано. ", bankBookId);
 
         bankBookMap.remove(bankBookId);
     }

@@ -11,4 +11,8 @@ public class ErrorDto {
     private Integer errorId;
     private String message;
 
+    public ErrorDto(String status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 }

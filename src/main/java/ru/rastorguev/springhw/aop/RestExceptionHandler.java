@@ -2,7 +2,9 @@ package ru.rastorguev.springhw.aop;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.rastorguev.springhw.exception.BankBookException;
 import ru.rastorguev.springhw.exception.BankBookNotFoundException;
@@ -31,6 +33,12 @@ public class RestExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorDto("BAD_REQUEST", exception.getBankBookId(), exception.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ErrorDto handleMissingPathVariableException(MissingPathVariableException exception) {
+        return new ErrorDto(HttpStatus.BAD_REQUEST.name(), exception.getMessage());
     }
 
 }

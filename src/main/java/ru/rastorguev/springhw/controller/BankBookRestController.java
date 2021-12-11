@@ -18,12 +18,12 @@ public class BankBookRestController {
         this.bankBookService = bankBookService;
     }
 
-    @GetMapping("/by-user-id/{userId}")
+    @GetMapping({"/by-user-id/{userId}", "/"})
     public ResponseEntity<List<BankBookDto>> getAllBankBooksByUserId(@PathVariable Integer userId) {
         return ResponseEntity.ok(bankBookService.getAllBankBookByUserId(userId));
     }
 
-    @GetMapping("/{bankBookId}")
+    @GetMapping({"/{bankBookId}", "/"})
     public ResponseEntity<BankBookDto> getBankBookById(@PathVariable Integer bankBookId) {
         return ResponseEntity.ok(bankBookService.getBankBookById(bankBookId));
     }
@@ -38,7 +38,7 @@ public class BankBookRestController {
         return ResponseEntity.ok(bankBookService.updateBankBook(bbd));
     }
 
-    @DeleteMapping("/{bankBookId}")
+    @DeleteMapping({"/{bankBookId}", "/"})
     public void deleteBankBook(@PathVariable Integer bankBookId) {
         bankBookService.deleteBankBook(bankBookId);
     }
