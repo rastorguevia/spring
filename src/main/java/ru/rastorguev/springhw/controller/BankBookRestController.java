@@ -1,13 +1,17 @@
 package ru.rastorguev.springhw.controller;
 
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.rastorguev.springhw.model.dto.BankBookDto;
+import ru.rastorguev.springhw.model.marker.Create;
+import ru.rastorguev.springhw.model.marker.Update;
 import ru.rastorguev.springhw.service.BankBookService;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/bank-book")
 public class BankBookRestController {
@@ -28,13 +32,15 @@ public class BankBookRestController {
         return ResponseEntity.ok(bankBookService.getBankBookById(bankBookId));
     }
 
+    @Validated(Create.class)
     @PostMapping
-    public ResponseEntity<BankBookDto> createBankBook(@RequestBody BankBookDto bbd) {
+    public ResponseEntity<BankBookDto> createBankBook(@Valid @RequestBody BankBookDto bbd) {
         return ResponseEntity.ok(bankBookService.createBankBook(bbd));
     }
 
+    @Validated(Update.class)
     @PutMapping
-    public ResponseEntity<BankBookDto> updateBankBook(@RequestBody BankBookDto bbd) {
+    public ResponseEntity<BankBookDto> updateBankBook(@Valid @RequestBody BankBookDto bbd) {
         return ResponseEntity.ok(bankBookService.updateBankBook(bbd));
     }
 

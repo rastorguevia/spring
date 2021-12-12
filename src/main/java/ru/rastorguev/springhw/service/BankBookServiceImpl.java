@@ -23,8 +23,6 @@ public class BankBookServiceImpl implements BankBookService {
 
     @PostConstruct
     private void init() {
-        //bankBookMap.put(1, new BankBookDto(sequenceId.getAndIncrement(), 1, "12345", new BigDecimal(250000), "RUB"));
-        //bankBookMap.put(2, new BankBookDto(sequenceId.getAndIncrement(), 1, "123456", new BigDecimal(30000), "EUR"));
         bankBookMap.put(1, BankBookDto.builder()
                 .id(sequenceId.getAndIncrement())
                 .userId(1)
