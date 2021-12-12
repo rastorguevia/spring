@@ -2,8 +2,9 @@ package ru.rastorguev.springhw.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.rastorguev.springhw.model.marker.Create;
-import ru.rastorguev.springhw.model.marker.Update;
+import ru.rastorguev.springhw.validation.Currency;
+import ru.rastorguev.springhw.validation.marker.Create;
+import ru.rastorguev.springhw.validation.marker.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class BankBookDto {
     @PositiveOrZero(message = "Баланс счета должен быть больше, либо равен 0!")
     private BigDecimal amount;
 
+    @Currency
     private String currency;
 
 }

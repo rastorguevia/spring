@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bankbook
+    username: user1
+    password: password1
+  jpa:
+    show-sql: true

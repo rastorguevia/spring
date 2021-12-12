@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.rastorguev.springhw.model.dto.BankBookDto;
-import ru.rastorguev.springhw.model.marker.Create;
-import ru.rastorguev.springhw.model.marker.Update;
+import ru.rastorguev.springhw.validation.marker.Create;
+import ru.rastorguev.springhw.validation.marker.Update;
 import ru.rastorguev.springhw.service.BankBookService;
 
 import javax.validation.Valid;
