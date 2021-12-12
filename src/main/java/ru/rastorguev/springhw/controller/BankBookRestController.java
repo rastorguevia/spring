@@ -3,7 +3,7 @@ package ru.rastorguev.springhw.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.rastorguev.springhw.model.BankBookDto;
+import ru.rastorguev.springhw.model.dto.BankBookDto;
 import ru.rastorguev.springhw.service.BankBookService;
 
 import java.util.List;

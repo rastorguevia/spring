@@ -6,10 +6,10 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.rastorguev.springhw.exception.BankBookException;
-import ru.rastorguev.springhw.exception.BankBookNotFoundException;
-import ru.rastorguev.springhw.exception.UserNotFoundException;
-import ru.rastorguev.springhw.model.ErrorDto;
+import ru.rastorguev.springhw.model.exception.BankBookException;
+import ru.rastorguev.springhw.model.exception.BankBookNotFoundException;
+import ru.rastorguev.springhw.model.exception.UserNotFoundException;
+import ru.rastorguev.springhw.model.dto.ErrorDto;
 
 @RestControllerAdvice
 public class RestExceptionHandler {

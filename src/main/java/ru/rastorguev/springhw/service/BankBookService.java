@@ -1,6 +1,6 @@
 package ru.rastorguev.springhw.service;
 
-import ru.rastorguev.springhw.model.BankBookDto;
+import ru.rastorguev.springhw.model.dto.BankBookDto;
 
 import java.util.List;
 

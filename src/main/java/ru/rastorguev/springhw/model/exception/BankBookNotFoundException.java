@@ -1,4 +1,4 @@
-package ru.rastorguev.springhw.exception;
+package ru.rastorguev.springhw.model.exception;
 
 public class BankBookNotFoundException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package ru.rastorguev.springhw.model;
+package ru.rastorguev.springhw.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

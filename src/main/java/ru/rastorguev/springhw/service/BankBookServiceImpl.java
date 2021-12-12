@@ -2,10 +2,10 @@ package ru.rastorguev.springhw.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import ru.rastorguev.springhw.exception.BankBookException;
-import ru.rastorguev.springhw.exception.BankBookNotFoundException;
-import ru.rastorguev.springhw.exception.UserNotFoundException;
-import ru.rastorguev.springhw.model.BankBookDto;
+import ru.rastorguev.springhw.model.exception.BankBookException;
+import ru.rastorguev.springhw.model.exception.BankBookNotFoundException;
+import ru.rastorguev.springhw.model.exception.UserNotFoundException;
+import ru.rastorguev.springhw.model.dto.BankBookDto;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
