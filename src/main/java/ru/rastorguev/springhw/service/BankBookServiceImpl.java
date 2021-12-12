@@ -2,10 +2,12 @@ package ru.rastorguev.springhw.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import ru.rastorguev.springhw.model.entity.BankBookEntity;
 import ru.rastorguev.springhw.model.exception.BankBookException;
 import ru.rastorguev.springhw.model.exception.BankBookNotFoundException;
 import ru.rastorguev.springhw.model.exception.UserNotFoundException;
 import ru.rastorguev.springhw.model.dto.BankBookDto;
+import ru.rastorguev.springhw.repository.BankBookRepository;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -18,37 +20,18 @@ import java.util.stream.Collectors;
 @Component
 public class BankBookServiceImpl implements BankBookService {
 
-    private final Map<Integer, BankBookDto> bankBookMap = new ConcurrentHashMap<>();
-    private final AtomicInteger sequenceId = new AtomicInteger(1);
+    BankBookRepository bankBookRepository;
 
-    @PostConstruct
-    private void init() {
-        bankBookMap.put(1, BankBookDto.builder()
-                .id(sequenceId.getAndIncrement())
-                .userId(1)
-                .number("12345")
-                .amount(new BigDecimal(250000))
-                .currency("RUB")
-                .build()
-        );
-
-        bankBookMap.put(2, BankBookDto.builder()
-                .id(sequenceId.getAndIncrement())
-                .userId(1)
-                .number("123456")
-                .amount(new BigDecimal(30000))
-                .currency("EUR")
-                .build()
-        );
+    public BankBookServiceImpl(BankBookRepository bankBookRepository) {
+        this.bankBookRepository = bankBookRepository;
     }
 
     @Override
     public List<BankBookDto> getAllBankBookByUserId(Integer userId) {
-        List<BankBookDto> list =
-                bankBookMap.values()
-                .stream()
-                .filter(bankBookDto -> bankBookDto.getUserId().equals(userId))
-                .collect(Collectors.toList());
+        List<BankBookDto> list = bankBookRepository.findAllByUserId(userId)
+                        .stream()
+                        .map(this::mapToDto)
+                        .collect(Collectors.toList());
 
         if (CollectionUtils.isEmpty(list)) throw new UserNotFoundException("Счета по id пользователя не найдены! ", userId);
         else return list;
@@ -56,65 +39,75 @@ public class BankBookServiceImpl implements BankBookService {
 
     @Override
     public BankBookDto getBankBookById(Integer bankBookId) {
-        BankBookDto bbd = bankBookMap.values().stream()
-                .filter(bankBookDto -> bankBookDto.getId().equals(bankBookId))
-                .findFirst()
-                .orElse(null);
-
-        if (bbd == null) throw new BankBookNotFoundException("Такой счет не найден! ", bankBookId);
-        else return bbd;
+        return bankBookRepository.findById(bankBookId)
+                .map(this::mapToDto)
+                .orElseThrow(() -> new BankBookNotFoundException("Такой счет не найден! ", bankBookId));
     }
 
     @Override
     public BankBookDto createBankBook(BankBookDto bankBookDto) {
 
-        boolean bankBookExist = bankBookMap.values()
+        boolean bankBookExist = bankBookRepository.findAll()
                 .stream()
-                .anyMatch(bbd -> bbd.getUserId().equals(bankBookDto.getUserId())
-                        && bbd.getNumber().equals(bankBookDto.getNumber())
-                        && bbd.getCurrency().equals(bankBookDto.getCurrency()));
+                .anyMatch(bbe -> bbe.getUserId().equals(bankBookDto.getUserId())
+                        && bbe.getNumber().equals(bankBookDto.getNumber())
+                        && bbe.getCurrency().equals(bankBookDto.getCurrency()));
 
         if (bankBookExist) throw new BankBookException(
                 "Cчет с данной валютой уже имеется в хранилище: BankBookDto.id = " + bankBookDto.getId() + " ",
                 bankBookDto.getId());
 
-        bankBookDto.setId(sequenceId.getAndIncrement());
-        bankBookMap.put(bankBookDto.getId(), bankBookDto);
-        return bankBookDto;
+        return mapToDto(bankBookRepository.save(mapToEntity(bankBookDto)));
     }
 
     @Override
     public BankBookDto updateBankBook(BankBookDto bbd) {
-        BankBookDto bankBookDtoFromMap = bankBookMap.get(bbd.getId());
-        if (bankBookDtoFromMap == null)
+        BankBookEntity bankBookEntity = bankBookRepository.getById(bbd.getId());
+        if (bankBookEntity.getId() == null)
             throw new BankBookException("Такого счета не существует. В обновлении отказано. ", bbd.getId());
 
-        if (!bankBookDtoFromMap.getNumber().equalsIgnoreCase(bbd.getNumber()))
+        if (!bankBookEntity.getNumber().equalsIgnoreCase(bbd.getNumber()))
             throw new BankBookException("Номер счета менять нельзя. В обновлении отказано. ", bbd.getId());
 
-        bankBookMap.put(bbd.getId(), bbd);
-        return bbd;
+        return mapToDto(bankBookRepository.save(mapToEntity(bbd)));
     }
 
     @Override
     public void deleteBankBook(Integer bankBookId) {
-        BankBookDto bankBookDtoFromMap = bankBookMap.get(bankBookId);
-        if (bankBookDtoFromMap == null)
+        BankBookEntity bankBookEntity =  bankBookRepository.getById(bankBookId);
+        if (bankBookEntity.getId() == null)
             throw new BankBookNotFoundException("Такого счета не существует. В удалении отказано. ", bankBookId);
 
-        bankBookMap.remove(bankBookId);
+        bankBookRepository.deleteById(bankBookId);
     }
 
     @Override
     public void deleteAllBankBookByUserId(Integer userId) {
-        List<BankBookDto> userBankBooks = bankBookMap.values()
-                .stream()
-                .filter(bankBookDto -> bankBookDto.getUserId().equals(userId))
-                .collect(Collectors.toList());
+        List<BankBookEntity> userBankBooks = bankBookRepository.findAllByUserId(userId);
 
         if (userBankBooks.isEmpty())
             throw new UserNotFoundException("Счета по id пользователя не найдены! В удалении отказано. ", userId);
 
-        userBankBooks.forEach(bbd -> bankBookMap.remove(bbd.getId()));
+        bankBookRepository.deleteAll(userBankBooks);
+    }
+
+    private BankBookDto mapToDto(BankBookEntity bbe) {
+        return BankBookDto.builder()
+                .id(bbe.getId())
+                .userId(bbe.getUserId())
+                .number(bbe.getNumber())
+                .amount(bbe.getAmount())
+                .currency(bbe.getCurrency())
+                .build();
+    }
+
+    private BankBookEntity mapToEntity(BankBookDto bbd) {
+        BankBookEntity bankBookEntity = new BankBookEntity();
+        bankBookEntity.setId(bbd.getId());
+        bankBookEntity.setUserId(bbd.getUserId());
+        bankBookEntity.setNumber(bbd.getNumber());
+        bankBookEntity.setAmount(bbd.getAmount());
+        bankBookEntity.setCurrency(bbd.getCurrency());
+        return bankBookEntity;
     }
 }
