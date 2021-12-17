@@ -15,17 +15,20 @@ public class BankBookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @Column(name = "user_id")
+    //@NotNull
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
 
-    @NotNull
+    //@NotNull
+    @Column(nullable = false)
     private String number;
 
-    @NotNull
+    //@NotNull
+    @Column(nullable = false)
     private BigDecimal amount;
 
-    @NotNull
+    //@NotNull
+    @Column(nullable = false)
     private String currency;
 
 }

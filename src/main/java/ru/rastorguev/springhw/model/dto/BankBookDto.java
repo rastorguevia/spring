@@ -20,15 +20,18 @@ public class BankBookDto {
     @NotNull(groups = Update.class, message = "При обновлении id не должен отсутствовать!")
     private Integer id;
 
+    @NotNull
     private Integer userId;
 
     @NotBlank(message = "Number не должен быть пустым или отсутствовать!")
     private String number;
 
     @PositiveOrZero(message = "Баланс счета должен быть больше, либо равен 0!")
+    @NotNull
     private BigDecimal amount;
 
     @Currency
+    @NotNull
     private String currency;
 
 }
